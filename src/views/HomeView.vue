@@ -1,15 +1,12 @@
 <template>
   <div class="home">
-    <h1>Главная страница</h1>
+    <header-component />
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HomeView'
-}
+<script setup>
+import HeaderComponent from '@/components/primari/Header.vue';
+
 </script>
 
-<style lang="scss" scoped>
-/* Ваши стили */
-</style>
+<style lang="scss" scoped></style>
