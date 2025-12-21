@@ -2,16 +2,19 @@
   <nav>
     <ul>
       <li>
-        <router-link to="#"> Обо мне </router-link>
+        <router-link to="#"> Обзор недвижимости </router-link>
       </li>
       <li>
-        <router-link to="#"> Примеры работ </router-link>
+        <router-link to="#"> Услуги </router-link>
       </li>
       <li>
-        <router-link to="#"> Контакты </router-link>
+        <router-link to="#"> Ипотеки </router-link>
       </li>
       <li>
-        <router-link to="#"> Частые вопросы </router-link>
+        <router-link to="#"> Блог</router-link>
+      </li>
+       <li>
+        <router-link to="#"> Контакты</router-link>
       </li>
     </ul>
   </nav>
