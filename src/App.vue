@@ -1,24 +1,34 @@
 <template>
   <div id="app">
-    <header-component />
-    <router-view />
+    <Header />
+    <main>
+      <HomeView />
+    </main>
+    <Footer />
+    <BackToTop />
+    <Lightbox />
   </div>
 </template>
 
-<script lang="js" >
-import Header from './components/primari/Header.vue';
+<script>
+import Header from './components/Header.vue';
+import HomeView from './views/HomeView.vue';
+import Footer from './components/Footer.vue';
+import BackToTop from './components/BackToTop.vue';
+import Lightbox from './components/Lightbox.vue';
+
 export default {
   name: 'App',
-  data() {
-    return {
-      message: ' !'
-    }
+  components: {
+    Header,
+    HomeView,
+    Footer,
+    BackToTop,
+    Lightbox
   }
-}
+};
 </script>
 
-<style lang="scss">
-@import "/src/assets/css/index.css";
-@import "/src/assets/sass/index.scss";
-// Здесь ваши глобальные стили (пока пустые)
+<style>
+@import './assets/css/styles.css';
 </style>
