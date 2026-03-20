@@ -2,27 +2,71 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">Агент недвижимости</a>
-            <button class="hamburger" id="hamburger">
+            <button class="hamburger" id="hamburger" @click="toggleMenu" :aria-expanded="isMenuOpen"
+                aria-label="Открыть меню" :class="{ 'active': isMenuOpen }">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#home">Главная</a></li>
-                <li><a href="#about">Обо мне</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#testimonials">Отзывы</a></li>
-                <li><a href="#gallery">Галерея</a></li>
-                <li><a href="#contact">Контакты</a></li>
+            <ul class="nav-menu" id="navMenu" :class="{ 'active': isMenuOpen }">
+                <li><a href="#home" @click="closeMenu">Главная</a></li>
+                <li><a href="#about" @click="closeMenu">Обо мне</a></li>
+                <li><a href="#services" @click="closeMenu">Услуги</a></li>
+                <li><a href="#testimonials" @click="closeMenu">Отзывы</a></li>
+                <li><a href="#gallery" @click="closeMenu">Галерея</a></li>
+                <li><a href="#contact" @click="closeMenu">Контакты</a></li>
             </ul>
         </div>
     </nav>
 </template>
 
-<script>
-export default {
-    name: 'Header'
+<script setup>
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+
+// Реактивное состояние меню
+const isMenuOpen = ref(false)
+
+// Методы управления меню
+const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value
 }
+
+const closeMenu = () => {
+    isMenuOpen.value = false
+}
+
+// Эффект блокировки скролла
+watch(isMenuOpen, (newState) => {
+    document.body.style.overflow = newState ? 'hidden' : 'auto'
+})
+
+// Обработчики событий
+let clickHandler
+let keyHandler
+
+onMounted(() => {
+    // Закрываем меню при клике вне его области
+    clickHandler = (event) => {
+        if (!event.target.closest('.nav-container') && isMenuOpen.value) {
+            closeMenu()
+        }
+    }
+    document.addEventListener('click', clickHandler)
+
+    // Закрываем меню по клавише ESC
+    keyHandler = (event) => {
+        if (event.key === 'Escape' && isMenuOpen.value) {
+            closeMenu()
+        }
+    }
+    document.addEventListener('keydown', keyHandler)
+})
+
+onUnmounted(() => {
+    // Удаляем обработчики событий при уничтожении компонента
+    document.removeEventListener('click', clickHandler)
+    document.removeEventListener('keydown', keyHandler)
+})
 </script>
 
 <style scoped>
@@ -101,7 +145,20 @@ export default {
     height: 3px;
     background: var(--copper);
     margin: 4px 0;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+}
+
+/* Анимация для иконок гамбургера при открытии */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
 }
 
 @media (max-width: 768px) {
@@ -114,14 +171,48 @@ export default {
         flex-direction: column;
         padding: 20px 0;
         display: none;
+        z-index: 999;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease-in-out;
     }
 
     .nav-menu.active {
         display: flex;
+        transform: translateY(0);
     }
 
     .hamburger {
         display: flex;
+    }
+
+    /* Уменьшаем отступы для мобильных устройств */
+    .nav-menu li {
+        margin: 10px 0;
+    }
+
+    .nav-menu a {
+        padding: 8px 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .nav-menu a {
+        font-size: 1rem;
+        padding: 6px 15px;
     }
 }
 </style>
